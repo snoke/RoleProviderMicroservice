@@ -19,11 +19,13 @@ class ApiController extends AbstractController
      */
     public function index(Request $request,EntityRepository $entities)
     {
+		$entities = $entities->findBy($request->query->all())
 		//$filter = $request->query->all();
 		//$jsonContent = $this->serializer->serialize($entities->findAll(), 'json');
 		
         return $this->json(
-			$entities->findAll()
+			$entities
         );
     }
 }
+
