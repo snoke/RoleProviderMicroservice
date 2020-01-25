@@ -43,3 +43,4 @@ class ApiController extends AbstractController
         );
     }
 }
+
