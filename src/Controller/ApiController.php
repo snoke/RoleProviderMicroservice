@@ -14,12 +14,27 @@ class ApiController extends AbstractController
 	public function __construct() {
 	}
 	
+	
     /**
-     * @Route("/api", name="api_index")
+     * @Route("/api", name="api_put", methods={"PUT"})
+     */
+    public function apiPut(Request $request,EntityRepository $entities)
+    {
+	}
+	
+    /**
+     * @Route("/api", name="api_delete", methods={"DELETE"})
+     */
+    public function apiDelete(Request $request,EntityRepository $entities)
+    {
+	}
+	
+    /**
+     * @Route("/api", name="api_get", methods={"GET"})
      */
     public function index(Request $request,EntityRepository $entities)
     {
-		$entities = $entities->findBy($request->query->all())
+		$entities = $entities->findBy($request->query->all());
 		//$filter = $request->query->all();
 		//$jsonContent = $this->serializer->serialize($entities->findAll(), 'json');
 		
