@@ -23,7 +23,7 @@ class ApiController extends AbstractController
 		//$jsonContent = $this->serializer->serialize($entities->findAll(), 'json');
 		
         return $this->json(
-			$entities->findAll(),
+			$entities->findAll()
         );
     }
 }
