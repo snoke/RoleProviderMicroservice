@@ -8,6 +8,12 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Repository\RoleRepository as EntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpClient\HttpClient;
+use App\Entity\Role;
+
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 class ApiController extends AbstractController
 {
@@ -16,14 +22,25 @@ class ApiController extends AbstractController
 	
     /**
      * @Route("/api", name="api_put", methods={"PUT"})
+     * @Route("/put", name="api_putget", methods={"get"})
      */
     public function apiPut(EntityManagerInterface $entityManager,Request $request,EntityRepository $entities)
     {
-		var_dump($request->query->all());die;
+		$encoders = [new JsonEncoder()];
+		$normalizers = [new ObjectNormalizer()];
+		$serializer = new Serializer($normalizers, $encoders);
+
+		$entity = $serializer->deserialize($request->query->all() ,'App\Entity\Role','json');
+		
+		/*
 		$id = $request->query->get('id');
-		$entity = $entities->findBy($id) or new Role();
-		foreach($request->query->all() as $var => $val) {
-		}
+		$name = $request->query->get('name');
+		$entity= ($id==null?new Role():$entities->findBy($id));
+		$entity->setName($name);
+		*/
+		$entityManager->persist($entity);
+		$entityManager->flush();
+		die('entity with id #' . $entity->getId() . ' added');
 	}
 	
     /**
@@ -31,9 +48,10 @@ class ApiController extends AbstractController
      */
     public function apiDelete(EntityManagerInterface $entityManager,Request $request,EntityRepository $entities)
     {
-		$entity = $entities->findBy($request->query->get('id'));
+		$entity = $entities->findOneBy(['id' => $request->query->get('id')]);
 		$entityManager->remove($entity);
 		$entityManager->flush();
+		die('deleted');
 	}
 	
     /**
