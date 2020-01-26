@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Repository\RoleRepository as EntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpClient\HttpClient;
+use App\Entity\Role;
 
 class ApiController extends AbstractController
 {
@@ -19,21 +20,24 @@ class ApiController extends AbstractController
      */
     public function apiPut(EntityManagerInterface $entityManager,Request $request,EntityRepository $entities)
     {
-		var_dump($request->query->all());die;
 		$id = $request->query->get('id');
-		$entity = $entities->findBy($id) or new Role();
-		foreach($request->query->all() as $var => $val) {
-		}
+		$name = $request->query->get('name');
+		$entity= ($id==null?new Role():$entities->findBy($id));
+		$entity->setName($name);
+		$entityManager->persist($entity);
+		$entityManager->flush();
+		die('entity with id #' . $entity->getId() . ' added');
 	}
 	
     /**
-     * @Route("/api", name="api_delete", methods={"DELETE"})
+     * @Route("/del", name="api_delete", methods={"get"})
      */
     public function apiDelete(EntityManagerInterface $entityManager,Request $request,EntityRepository $entities)
     {
-		$entity = $entities->findBy($request->query->get('id'));
+		$entity = $entities->findOneBy(['id' => $request->query->get('id')]);
 		$entityManager->remove($entity);
 		$entityManager->flush();
+		die('deleted');
 	}
 	
     /**
