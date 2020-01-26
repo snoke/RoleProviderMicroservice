@@ -19,6 +19,7 @@ class ApiController extends AbstractController
      */
     public function apiPut(EntityManagerInterface $entityManager,Request $request,EntityRepository $entities)
     {
+		var_dump($request->query->all());die;
 		$id = $request->query->get('id');
 		$entity = $entities->findBy($id) or new Role();
 		foreach($request->query->all() as $var => $val) {
