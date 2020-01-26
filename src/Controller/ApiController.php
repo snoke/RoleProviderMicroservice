@@ -10,6 +10,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpClient\HttpClient;
 use App\Entity\Role;
 
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+
 class ApiController extends AbstractController
 {
 	public function __construct() {
@@ -17,20 +22,29 @@ class ApiController extends AbstractController
 	
     /**
      * @Route("/api", name="api_put", methods={"PUT"})
+     * @Route("/put", name="api_putget", methods={"get"})
      */
     public function apiPut(EntityManagerInterface $entityManager,Request $request,EntityRepository $entities)
     {
+		$encoders = [new JsonEncoder()];
+		$normalizers = [new ObjectNormalizer()];
+		$serializer = new Serializer($normalizers, $encoders);
+
+		$entity = $serializer->deserialize(json_encode($request->query->all()) ,'App\Entity\Role','json');
+		
+		/*
 		$id = $request->query->get('id');
 		$name = $request->query->get('name');
 		$entity= ($id==null?new Role():$entities->findBy($id));
 		$entity->setName($name);
+		*/
 		$entityManager->persist($entity);
 		$entityManager->flush();
 		die('entity with id #' . $entity->getId() . ' added');
 	}
 	
     /**
-     * @Route("/del", name="api_delete", methods={"get"})
+     * @Route("/api", name="api_delete", methods={"DELETE"})
      */
     public function apiDelete(EntityManagerInterface $entityManager,Request $request,EntityRepository $entities)
     {
