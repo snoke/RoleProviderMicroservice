@@ -43,7 +43,7 @@ class ApiController extends AbstractController
 	}
 	
     /**
-     * @Route("/put/{id}", name="api_putget", methods={"get"})
+     * @Route("/api/{id}", name="api_putget", methods={"put"})
      */
     public function apiPut(EntityManagerInterface $entityManager,Request $request,EntityRepository $entities,$id)
     {
