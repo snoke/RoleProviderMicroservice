@@ -21,10 +21,17 @@ class ApiController extends AbstractController
 	}
 	
     /**
-     * @Route("/api", name="api_put", methods={"PUT"})
-     * @Route("/put", name="api_putget", methods={"get"})
+     * @Route("/api/{id}", name="api_patch", methods={"Patch"})
      */
-    public function apiPut(EntityManagerInterface $entityManager,Request $request,EntityRepository $entities)
+    public function apiPatch(EntityManagerInterface $entityManager,Request $request,EntityRepository $entities,$id)
+    {
+		die('patch');
+	}
+	
+    /**
+     * @Route("/put/{id}", name="api_putget", methods={"get"})
+     */
+    public function apiPut(EntityManagerInterface $entityManager,Request $request,EntityRepository $entities,$id)
     {
 		$encoders = [new JsonEncoder()];
 		$normalizers = [new ObjectNormalizer()];
@@ -44,9 +51,9 @@ class ApiController extends AbstractController
 	}
 	
     /**
-     * @Route("/api", name="api_delete", methods={"DELETE"})
+     * @Route("/api/{id}", name="api_delete", methods={"DELETE"})
      */
-    public function apiDelete(EntityManagerInterface $entityManager,Request $request,EntityRepository $entities)
+    public function apiDelete(EntityManagerInterface $entityManager,Request $request,EntityRepository $entities,$id)
     {
 		$entity = $entities->findOneBy(['id' => $request->query->get('id')]);
 		$entityManager->remove($entity);
@@ -55,7 +62,21 @@ class ApiController extends AbstractController
 	}
 	
     /**
-     * @Route("/api", name="api_get", methods={"GET"})
+     * @Route("/api/{id}", name="api_get", methods={"GET"})
+     */
+    public function index(Request $request,EntityRepository $entities,$id)
+    {
+		$entities = $entities->findOneBy($request->query->all());
+		//$filter = $request->query->all();
+		//$jsonContent = $this->serializer->serialize($entities->findAll(), 'json');
+		
+        return $this->json(
+			$entities
+        );
+    }
+	
+    /**
+     * @Route("/api", name="api_search", methods={"GET"})
      */
     public function index(Request $request,EntityRepository $entities)
     {
