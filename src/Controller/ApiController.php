@@ -21,6 +21,20 @@ class ApiController extends AbstractController
 	}
 	
     /**
+     * @Route("/api", name="api_search", methods={"GET"})
+     */
+    public function index(Request $request,EntityRepository $entities)
+    {
+		$entities = $entities->findBy($request->query->all());
+		//$filter = $request->query->all();
+		//$jsonContent = $this->serializer->serialize($entities->findAll(), 'json');
+		
+        return $this->json(
+			$entities
+        );
+    }
+	
+    /**
      * @Route("/api/{id}", name="api_patch", methods={"Patch"})
      */
     public function apiPatch(EntityManagerInterface $entityManager,Request $request,EntityRepository $entities,$id)
@@ -64,23 +78,9 @@ class ApiController extends AbstractController
     /**
      * @Route("/api/{id}", name="api_get", methods={"GET"})
      */
-    public function index(Request $request,EntityRepository $entities,$id)
+    public function apiGet(Request $request,EntityRepository $entities,$id)
     {
 		$entities = $entities->findOneBy($request->query->all());
-		//$filter = $request->query->all();
-		//$jsonContent = $this->serializer->serialize($entities->findAll(), 'json');
-		
-        return $this->json(
-			$entities
-        );
-    }
-	
-    /**
-     * @Route("/api", name="api_search", methods={"GET"})
-     */
-    public function index(Request $request,EntityRepository $entities)
-    {
-		$entities = $entities->findBy($request->query->all());
 		//$filter = $request->query->all();
 		//$jsonContent = $this->serializer->serialize($entities->findAll(), 'json');
 		
