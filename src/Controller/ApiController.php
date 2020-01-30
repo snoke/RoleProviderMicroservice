@@ -78,6 +78,8 @@ class ApiController extends AbstractController
 	
     /**
      * @Route("/api/{id}", name="api_put", methods={"PUT"})
+    /**
+     * @Route("/api/{entity}/{id}", name="api_put", methods={"PUT"})
      */
     public function apiPut(EntityManagerInterface $entityManager,Request $request,EntityRepository $entities,$id)
     {
@@ -96,6 +98,31 @@ class ApiController extends AbstractController
 		$entityManager->persist($entity);
 		$entityManager->flush();
 		return new Response();
+	}
+	
+    /**
+     * @Route("/api/{id}", name="api_head", methods={"HEAD"})
+     */
+    public function apiHead(EntityManagerInterface $entityManager,Request $request,EntityRepository $entities,$id)
+    {
+	}
+    /**
+     * @Route("/api/{id}", name="api_opt", methods={"OPTIONS"})
+     */
+    public function apiOpt(EntityManagerInterface $entityManager,Request $request,EntityRepository $entities,$id)
+    {
+	}
+    /**
+     * @Route("/api/{id}", name="api_con", methods={"CONNECT"})
+     */
+    public function apiCon(EntityManagerInterface $entityManager,Request $request,EntityRepository $entities,$id)
+    {
+	}
+    /**
+     * @Route("/api/{id}", name="api_tra", methods={"TRACE"})
+     */
+    public function apiTrace(EntityManagerInterface $entityManager,Request $request,EntityRepository $entities,$id)
+    {
 	}
 	
 	
